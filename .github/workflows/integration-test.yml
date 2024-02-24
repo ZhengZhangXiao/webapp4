@@ -40,8 +40,8 @@ jobs:
 
           - name: Run Integration Tests in helloWorld
             run: 
-             //mvn clean test -Dspring.datasource.url=jdbc:mysql://localhost:3306/clod01 -Dspring.datasource.username=root -Dspring.datasource.password=zhenyang7838675
-             mvn clean install -DskipTests=false
+             mvn clean test -Dspring.datasource.url=jdbc:mysql://localhost:3306/clod01 -Dspring.datasource.username=root -Dspring.datasource.password=zhenyang7838675
+             
           
           - name: Print application logs
             if: failure() # only if previous steps failed
