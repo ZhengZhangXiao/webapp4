@@ -29,20 +29,26 @@ jobs:
             with:
              java-version: '17'
              distribution: 'adopt'
-   
-  
-          - name: Cache Maven packages
-            uses: actions/cache@v2
-            with:
-               path: ~/.m2
-               key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
-               restore-keys: ${{ runner.os }}-m2
 
-          - name: Run Integration Tests in helloWorld
-            run: 
-             mvn clean test -Dspring.datasource.url=jdbc:mysql://localhost:3306/clod01 -Dspring.datasource.username=root -Dspring.datasource.password=zhenyang7838675
-             
-          
-          - name: Print application logs
-            if: failure() # only if previous steps failed
-            run: cat /path/to/your/application/logs.log
+          - name: Build with Maven
+            run: mvn -B package --file pom.xml
+
+          - name: Run Integration Tests
+            run: mvn verify
+#          - name: Cache Maven packages
+#            uses: actions/cache@v2
+#            with:
+#               path: ~/.m2
+#               key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+#               restore-keys: ${{ runner.os }}-m2
+#
+#          - name: Run Integration Tests in helloWorld
+#            run:
+#             mvn clean test -Dspring.datasource.url=jdbc:mysql://localhost:3306/clod01 -Dspring.datasource.username=root -Dspring.datasource.password=zhenyang7838675
+#
+#          - name: Build with Maven
+#             run: mvn -B package --file pom.xml
+#
+#           - name: Run Integration Tests
+#             run: mvn verify
+#
