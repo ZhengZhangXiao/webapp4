@@ -21,7 +21,7 @@ jobs:
           --health-cmd="mysqladmin ping"
           --health-interval=10s
           --health-timeout=10s
-          --health-retries=10
+          --health-retries=5
     steps:
           - uses: actions/checkout@v2
           - name: Set up JDK 17
@@ -29,6 +29,9 @@ jobs:
             with:
              java-version: '17'
              distribution: 'adopt'
+             
+          - name: Set Environment Variable for Profile
+            run: echo "SPRING_PROFILES_ACTIVE=ci" >> $GITHUB_ENV
 
           - name: Build with Maven
             run: mvn -B package --file pom.xml
@@ -45,10 +48,4 @@ jobs:
 #          - name: Run Integration Tests in helloWorld
 #            run:
 #             mvn clean test -Dspring.datasource.url=jdbc:mysql://localhost:3306/clod01 -Dspring.datasource.username=root -Dspring.datasource.password=zhenyang7838675
-#
-#          - name: Build with Maven
-#             run: mvn -B package --file pom.xml
-#
-#           - name: Run Integration Tests
-#             run: mvn verify
 #
