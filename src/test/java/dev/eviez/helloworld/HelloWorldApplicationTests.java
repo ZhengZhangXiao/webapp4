@@ -2,16 +2,24 @@ package dev.eviez.helloworld;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.awaitility.Awaitility;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
+
+import java.time.Duration;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -50,14 +58,31 @@ class HelloWorldApplicationTests {
     private int port;
 
     @Autowired
-    private TestRestTemplate restTemplate;
+    private  TestRestTemplate restTemplate;
 
     private String getRootUrl() {
         return "http://localhost:" + port + "/users";
     }
+
+    @BeforeEach
+    public  void waitForApplicationUp() {
+        Awaitility.await()
+                .atMost(Duration.ofMinutes(2))
+                .pollInterval(Duration.ofSeconds(10))
+                .until(this::isAppUp);
+    }
+    private  boolean isAppUp() {
+        String url = getRootUrl();
+        try {
+            restTemplate.getForEntity(url, String.class);
+            return true;
+        } catch (HttpClientErrorException ex) {
+            return false;
+        }
+    }
     @Test
     public void testCreateUser() {
-        String userJson = "{\"id\":\"100\",\"email\":\"test16@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test06\",\"lastName\":\"test06\"}";
+        String userJson = "{\"id\":\"100\",\"email\":\"test20@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test06\",\"lastName\":\"test06\"}";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -77,7 +102,7 @@ class HelloWorldApplicationTests {
         TestRestTemplate authRestTemplate = restTemplate.withBasicAuth("test03@gmail.com", "1234567");
 
         // Step 1: Create a user
-        String createUserJson = "{\"id\":\"105\",\"email\":\"test17@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test01\",\"lastName\":\"test01\"}";
+        String createUserJson = "{\"id\":\"105\",\"email\":\"test21@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test01\",\"lastName\":\"test01\"}";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> createEntity = new HttpEntity<>(createUserJson, headers);
@@ -87,7 +112,7 @@ class HelloWorldApplicationTests {
         Long userId = extractUserIdFromResponse(createResponse);
 
         // Step 2: Update the user
-        String updateUserJson = "{ \"firstName\":\"test17\",\"lastName\":\"test17\"}";
+        String updateUserJson = "{ \"firstName\":\"test21\",\"lastName\":\"test21\"}";
         HttpEntity<String> updateEntity = new HttpEntity<>(updateUserJson, headers);
         // Assuming /{id} is the endpoint for updating user. Replace "{id}" with actual user ID.
         authRestTemplate.put(getRootUrl() + "/"+userId, updateEntity);
