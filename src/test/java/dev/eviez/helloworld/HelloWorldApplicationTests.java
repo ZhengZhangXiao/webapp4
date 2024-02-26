@@ -82,7 +82,7 @@ class HelloWorldApplicationTests {
     }
     @Test
     public void testCreateUser() {
-        String userJson = "{\"id\":\"100\",\"email\":\"test20@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test06\",\"lastName\":\"test06\"}";
+        String userJson = "{\"id\":\"100\",\"email\":\"test22@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test06\",\"lastName\":\"test06\"}";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
@@ -99,20 +99,21 @@ class HelloWorldApplicationTests {
 
     @Test
     public void testUpdateUser() {
-        TestRestTemplate authRestTemplate = restTemplate.withBasicAuth("test21@gmail.com", "1234567");
+
 
         // Step 1: Create a user
-        String createUserJson = "{\"id\":\"105\",\"email\":\"test21@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test01\",\"lastName\":\"test01\"}";
+        String createUserJson = "{\"id\":\"105\",\"email\":\"test23@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test01\",\"lastName\":\"test01\"}";
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> createEntity = new HttpEntity<>(createUserJson, headers);
-        ResponseEntity<String> createResponse = authRestTemplate.postForEntity(getRootUrl(), createEntity, String.class);
+        ResponseEntity<String> createResponse = restTemplate.postForEntity(getRootUrl(), createEntity, String.class);
         assertNotNull(createResponse);
         assertEquals(HttpStatus.OK, createResponse.getStatusCode());
         Long userId = extractUserIdFromResponse(createResponse);
 
+        TestRestTemplate authRestTemplate = restTemplate.withBasicAuth("test23@gmail.com", "1234567");
         // Step 2: Update the user
-        String updateUserJson = "{ \"firstName\":\"test21\",\"lastName\":\"test21\"}";
+        String updateUserJson = "{ \"firstName\":\"test23\",\"lastName\":\"test23\"}";
         HttpEntity<String> updateEntity = new HttpEntity<>(updateUserJson, headers);
         // Assuming /{id} is the endpoint for updating user. Replace "{id}" with actual user ID.
         authRestTemplate.put(getRootUrl() + "/"+userId, updateEntity);
