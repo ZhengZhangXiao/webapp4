@@ -99,7 +99,7 @@ class HelloWorldApplicationTests {
 
     @Test
     public void testUpdateUser() {
-        TestRestTemplate authRestTemplate = restTemplate.withBasicAuth("test03@gmail.com", "1234567");
+        TestRestTemplate authRestTemplate = restTemplate.withBasicAuth("test21@gmail.com", "1234567");
 
         // Step 1: Create a user
         String createUserJson = "{\"id\":\"105\",\"email\":\"test21@gmail.com\", \"password\":\"1234567\",\"firstName\":\"test01\",\"lastName\":\"test01\"}";

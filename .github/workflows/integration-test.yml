@@ -14,7 +14,7 @@ jobs:
         image: mysql:8.0.21
         env:
           MYSQL_ROOT_PASSWORD: zhenyang7838675
-          MYSQL_DATABASE: cloud01.users
+          MYSQL_DATABASE: cloud01
         ports:
           - 3306:3306
         options: >-
